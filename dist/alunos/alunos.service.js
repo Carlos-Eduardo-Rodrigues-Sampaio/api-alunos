@@ -4,55 +4,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 import { Injectable } from '@nestjs/common';
+import { AlunosRepository } from './alunos.repository.js';
 let AlunosService = class AlunosService {
-    alunos = [
-        {
-            id: 1,
-            nome: 'Ana',
-            curso: 'Sistemas de Informação',
-        },
-        {
-            id: 2,
-            nome: 'Carlos',
-            curso: 'Ciência da Computação',
-        },
-    ];
+    alunosRepository;
+    constructor(alunosRepository) {
+        this.alunosRepository = alunosRepository;
+    }
     findAll() {
-        return this.alunos;
+        return this.alunosRepository.findAll();
     }
     findById(id) {
-        return this.alunos.find((aluno) => aluno.id === id);
+        return this.alunosRepository.findById(id);
     }
     create(nome, curso) {
-        const novoAluno = {
-            id: this.alunos.length + 1,
-            nome,
-            curso,
-        };
-        this.alunos.push(novoAluno);
-        return novoAluno;
+        return this.alunosRepository.create(nome, curso);
     }
-    update(id, nome, curso) {
-        const aluno = this.alunos.find((aluno) => aluno.id === id);
-        if (!aluno) {
-            return null;
-        }
-        aluno.nome = nome;
-        aluno.curso = curso;
-        return aluno;
+    async update(id, nome, curso) {
+        await this.alunosRepository.update(id, nome, curso);
+        return this.alunosRepository.findById(id);
     }
     delete(id) {
-        const index = this.alunos.findIndex((aluno) => aluno.id === id);
-        if (index === -1) {
-            return false;
-        }
-        this.alunos.splice(index, 1);
-        return true;
+        return this.alunosRepository.delete(id);
     }
 };
 AlunosService = __decorate([
-    Injectable()
+    Injectable(),
+    __metadata("design:paramtypes", [AlunosRepository])
 ], AlunosService);
 export { AlunosService };
 //# sourceMappingURL=alunos.service.js.map

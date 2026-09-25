@@ -5,25 +5,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import { Module } from '@nestjs/common';
-import { createObserveModule } from '@nestjs/observe';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
+import { ConfigModule } from '@nestjs/config';
 import { AlunosModule } from './alunos/alunos.module.js';
-export const { ObserveModule, ObserveInstrument } = createObserveModule();
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     Module({
         imports: [
-            ObserveModule.forRoot({
-                appKey: 'YOUR_APP_KEY',
-                appSecret: 'YOUR_APP_SECRET',
-                serviceId: 'api-alunos',
+            ConfigModule.forRoot({
+                isGlobal: true,
             }),
             AlunosModule,
         ],
-        controllers: [AppController],
-        providers: [AppService],
     })
 ], AppModule);
 export { AppModule };

@@ -1,24 +1,14 @@
+import { AlunosRepository } from './alunos.repository.js';
 export declare class AlunosService {
-    private alunos;
-    findAll(): {
+    private readonly alunosRepository;
+    constructor(alunosRepository: AlunosRepository);
+    findAll(): Promise<import("./alunos.repository.js").AlunoRow[]>;
+    findById(id: number): Promise<import("./alunos.repository.js").AlunoRow>;
+    create(nome: string, curso: string): Promise<{
         id: number;
         nome: string;
         curso: string;
-    }[];
-    findById(id: number): {
-        id: number;
-        nome: string;
-        curso: string;
-    } | undefined;
-    create(nome: string, curso: string): {
-        id: number;
-        nome: string;
-        curso: string;
-    };
-    update(id: number, nome: string, curso: string): {
-        id: number;
-        nome: string;
-        curso: string;
-    } | null;
-    delete(id: number): boolean;
+    }>;
+    update(id: number, nome: string, curso: string): Promise<import("./alunos.repository.js").AlunoRow>;
+    delete(id: number): Promise<number>;
 }

@@ -1,10 +1,21 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
+
 import { AlunosService } from './alunos.service.js';
 
 @Controller('alunos')
 export class AlunosController {
   constructor(
-    private readonly alunosService: AlunosService,
+    private readonly alunosService:
+      AlunosService,
   ) {}
 
   @Get()
@@ -14,17 +25,19 @@ export class AlunosController {
 
   @Get(':id')
   findById(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe)
+    id: number,
   ) {
     return this.alunosService.findById(id);
   }
 
   @Post()
   create(
-  @Body() body: {
-    nome: string;
-    curso: string;
-  },
+    @Body()
+    body: {
+      nome: string;
+      curso: string;
+    },
   ) {
     return this.alunosService.create(
       body.nome,
@@ -34,13 +47,16 @@ export class AlunosController {
 
   @Put(':id')
   update(
-  @Param('id', ParseIntPipe) id: number,
-  @Body() body: {
+    @Param('id', ParseIntPipe)
+    id: number,
+
+    @Body()
+    body: {
       nome: string;
       curso: string;
     },
   ) {
-  return this.alunosService.update(
+    return this.alunosService.update(
       id,
       body.nome,
       body.curso,
@@ -49,7 +65,8 @@ export class AlunosController {
 
   @Delete(':id')
   delete(
-  @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe)
+    id: number,
   ) {
     return this.alunosService.delete(id);
   }
