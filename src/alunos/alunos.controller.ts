@@ -3,13 +3,25 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
 
-import { AlunosService } from './alunos.service.js';
+import {
+  AlunosService,
+} from './alunos.service.js';
+
+import {
+  CreateAlunoDto,
+} from './dto/create-aluno.dto.js';
+
+import {
+  UpdateAlunoDto,
+} from './dto/update-aluno.dto.js';
 
 @Controller('alunos')
 export class AlunosController {
@@ -34,15 +46,9 @@ export class AlunosController {
   @Post()
   create(
     @Body()
-    body: {
-      nome: string;
-      curso: string;
-    },
+    data: CreateAlunoDto,
   ) {
-    return this.alunosService.create(
-      body.nome,
-      body.curso,
-    );
+    return this.alunosService.create(data);
   }
 
   @Put(':id')
@@ -51,23 +57,20 @@ export class AlunosController {
     id: number,
 
     @Body()
-    body: {
-      nome: string;
-      curso: string;
-    },
+    data: UpdateAlunoDto,
   ) {
     return this.alunosService.update(
       id,
-      body.nome,
-      body.curso,
+      data,
     );
   }
 
   @Delete(':id')
-  delete(
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(
     @Param('id', ParseIntPipe)
     id: number,
   ) {
-    return this.alunosService.delete(id);
+    await this.alunosService.delete(id);
   }
 }
