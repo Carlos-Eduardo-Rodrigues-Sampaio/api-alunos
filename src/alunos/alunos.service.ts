@@ -54,13 +54,11 @@ export class AlunosService {
   ) {
     await this.findById(id);
 
-    await this.alunosRepository.update(
+    return this.alunosRepository.update(
       id,
       data.nome,
       data.curso,
     );
-
-    return this.findById(id);
   }
 
   async delete(id: number) {

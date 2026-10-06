@@ -1,119 +1,68 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+} from '@nestjs/common';
 
 import {
-  ResultSetHeader,
-  RowDataPacket,
-} from 'mysql2';
-
-import { DatabaseService } from '../database/database.service.js';
-
-export interface AlunoRow extends RowDataPacket {
-  id: number;
-  nome: string;
-  curso: string;
-}
+  PrismaService,
+} from '../prisma/prisma.service.js';
 
 @Injectable()
 export class AlunosRepository {
   constructor(
-    private readonly databaseService:
-      DatabaseService,
+    private readonly prisma:
+      PrismaService,
   ) {}
 
-  async findAll() {
-    const [rows] =
-      await this.databaseService.execute<
-        AlunoRow[]
-      >(
-        `
-          SELECT id, nome, curso
-          FROM alunos
-          ORDER BY id
-        `,
-      );
-
-    return rows;
+  findAll() {
+    return this.prisma.aluno.findMany({
+      orderBy: {
+        id: 'asc',
+      },
+    });
   }
 
-  async findById(id: number) {
-    const [rows] =
-      await this.databaseService.execute<
-        AlunoRow[]
-      >(
-        `
-          SELECT id, nome, curso
-          FROM alunos
-          WHERE id = ?
-        `,
-        [id],
-      );
-
-    return rows[0] ?? null;
+  findById(id: number) {
+    return this.prisma.aluno.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 
-  async create(
+  create(
     nome: string,
     curso: string,
   ) {
-    const [result] =
-      await this.databaseService.execute<
-        ResultSetHeader
-      >(
-        `
-          INSERT INTO alunos (
-            nome,
-            curso
-          )
-          VALUES (?, ?)
-        `,
-        [nome, curso],
-      );
-
-    return {
-      id: result.insertId,
-      nome,
-      curso,
-    };
+    return this.prisma.aluno.create({
+      data: {
+        nome,
+        curso,
+      },
+    });
   }
 
-  async update(
+  update(
     id: number,
     nome: string,
     curso: string,
   ) {
-    const [result] =
-      await this.databaseService.execute<
-        ResultSetHeader
-      >(
-        `
-          UPDATE alunos
-          SET
-            nome = ?,
-            curso = ?
-          WHERE id = ?
-        `,
-        [
-          nome,
-          curso,
-          id,
-        ],
-      );
+    return this.prisma.aluno.update({
+      where: {
+        id,
+      },
 
-    return result.affectedRows;
+      data: {
+        nome,
+        curso,
+      },
+    });
   }
 
-  async delete(id: number) {
-    const [result] =
-      await this.databaseService.execute<
-        ResultSetHeader
-      >(
-        `
-          DELETE FROM alunos
-          WHERE id = ?
-        `,
-        [id],
-      );
-
-    return result.affectedRows;
+  delete(id: number) {
+    return this.prisma.aluno.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

@@ -7,8 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Injectable } from '@nestjs/common';
-import { AlunosRepository } from './alunos.repository.js';
+import { Injectable, NotFoundException, } from '@nestjs/common';
+import { AlunosRepository, } from './alunos.repository.js';
 let AlunosService = class AlunosService {
     alunosRepository;
     constructor(alunosRepository) {
@@ -17,18 +17,23 @@ let AlunosService = class AlunosService {
     findAll() {
         return this.alunosRepository.findAll();
     }
-    findById(id) {
-        return this.alunosRepository.findById(id);
+    async findById(id) {
+        const aluno = await this.alunosRepository.findById(id);
+        if (!aluno) {
+            throw new NotFoundException('Aluno não encontrado');
+        }
+        return aluno;
     }
-    create(nome, curso) {
-        return this.alunosRepository.create(nome, curso);
+    create(data) {
+        return this.alunosRepository.create(data.nome, data.curso);
     }
-    async update(id, nome, curso) {
-        await this.alunosRepository.update(id, nome, curso);
-        return this.alunosRepository.findById(id);
+    async update(id, data) {
+        await this.findById(id);
+        return this.alunosRepository.update(id, data.nome, data.curso);
     }
-    delete(id) {
-        return this.alunosRepository.delete(id);
+    async delete(id) {
+        await this.findById(id);
+        await this.alunosRepository.delete(id);
     }
 };
 AlunosService = __decorate([

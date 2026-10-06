@@ -10,8 +10,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, } from '@nestjs/common';
-import { AlunosService } from './alunos.service.js';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, } from '@nestjs/common';
+import { AlunosService, } from './alunos.service.js';
+import { CreateAlunoDto, } from './dto/create-aluno.dto.js';
+import { UpdateAlunoDto, } from './dto/update-aluno.dto.js';
 let AlunosController = class AlunosController {
     alunosService;
     constructor(alunosService) {
@@ -23,14 +25,14 @@ let AlunosController = class AlunosController {
     findById(id) {
         return this.alunosService.findById(id);
     }
-    create(body) {
-        return this.alunosService.create(body.nome, body.curso);
+    create(data) {
+        return this.alunosService.create(data);
     }
-    update(id, body) {
-        return this.alunosService.update(id, body.nome, body.curso);
+    update(id, data) {
+        return this.alunosService.update(id, data);
     }
-    delete(id) {
-        return this.alunosService.delete(id);
+    async delete(id) {
+        await this.alunosService.delete(id);
     }
 };
 __decorate([
@@ -50,7 +52,7 @@ __decorate([
     Post(),
     __param(0, Body()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [CreateAlunoDto]),
     __metadata("design:returntype", void 0)
 ], AlunosController.prototype, "create", null);
 __decorate([
@@ -58,15 +60,16 @@ __decorate([
     __param(0, Param('id', ParseIntPipe)),
     __param(1, Body()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:paramtypes", [Number, UpdateAlunoDto]),
     __metadata("design:returntype", void 0)
 ], AlunosController.prototype, "update", null);
 __decorate([
     Delete(':id'),
+    HttpCode(HttpStatus.NO_CONTENT),
     __param(0, Param('id', ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], AlunosController.prototype, "delete", null);
 AlunosController = __decorate([
     Controller('alunos'),
