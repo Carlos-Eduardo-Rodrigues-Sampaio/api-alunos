@@ -1,4 +1,5 @@
 import {
+  IsEmail,
   IsNotEmpty,
   IsString,
   MaxLength,
@@ -9,6 +10,10 @@ export class CreateAlunoDto {
   @IsNotEmpty()
   @MaxLength(100)
   nome: string;
+
+  @IsEmail()
+  @MaxLength(150)
+  email: string;
 
   @IsString()
   @IsNotEmpty()

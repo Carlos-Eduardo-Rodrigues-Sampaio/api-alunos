@@ -30,16 +30,16 @@ export class AlunosRepository {
   }
 
   create(
-    nome: string,
-    curso: string,
-  ) {
-    return this.prisma.aluno.create({
-      data: {
-        nome,
-        curso,
-      },
-    });
-  }
+  nome: string,
+  curso: string,
+) {
+  return this.prisma.aluno.create({
+    data: {
+      nome,
+      curso,
+    },
+  });
+}
 
   update(
     id: number,
